@@ -48,17 +48,17 @@ export default function PriceComparator({ primaryScan }) {
   const standardUnitLabel = isVolume ? '₹ / 100 ml' : '₹ / 100 g';
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all">
-      <div className="flex items-center justify-between mb-4">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs transition-all">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2 mb-4">
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          <Calculator className="w-4 h-4 text-slate-400" />
+          <Calculator className="w-4 h-4 text-slate-400 shrink-0" />
           <span>Price-Per-Unit Value Comparator</span>
         </div>
         <span className="text-[11px] text-slate-500 font-medium">Standardized to {standardUnitLabel}</span>
       </div>
 
       {/* Side-by-side comparison grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         {/* Pack 1 (Scanned Item) */}
         <div className={`p-4 rounded-xl border transition-all ${
           winner === 'p1' 

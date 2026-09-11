@@ -86,11 +86,11 @@ export default function MyPantry({ onSelectItem }) {
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3 mb-4">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3 mb-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-            <Package className="w-4 h-4 text-slate-400" />
+            <Package className="w-4 h-4 text-slate-400 shrink-0" />
             <span>My Household Pantry</span>
           </div>
           <h3 className="text-sm font-bold text-slate-900 mt-0.5">
@@ -130,7 +130,7 @@ export default function MyPantry({ onSelectItem }) {
             const isSoon = daysLeft >= 0 && daysLeft <= 30;
 
             return (
-              <div key={item.id} className="py-3 flex items-center justify-between gap-3">
+              <div key={item.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="text-xs font-bold text-slate-900 truncate">
                     {item.name}

@@ -86,14 +86,14 @@ export default function VerifyNotice() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-3 sm:p-6">
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
           <KeyRound className="w-3.5 h-3.5 text-slate-400" />
           <span>Statutory Document Integrity Service</span>
         </div>
-        <h2 className="text-xl font-bold text-slate-900">Verify Formal Notice Integrity</h2>
+        <h2 className="text-lg sm:text-xl font-bold text-slate-900">Verify Formal Notice Integrity</h2>
         <p className="text-xs text-slate-600 mt-1 max-w-2xl">
           Recipients and magistrates can verify that an issued Show-Cause Notice is genuine, originated from the
           Department of Consumer Affairs (DoCA), and has not been altered in transit.
@@ -101,22 +101,22 @@ export default function VerifyNotice() {
       </div>
 
       {/* Quick Test Bar */}
-      <div className="bg-slate-100 border border-slate-200 rounded-xl p-3.5 mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-slate-100 border border-slate-200 rounded-xl p-3 sm:p-3.5 mb-4 sm:mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3">
         <div className="text-xs font-semibold text-slate-700">
           🧪 Quick Demo Simulation:
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
           <button
             onClick={handleTestGenuine}
             disabled={loading}
-            className="px-3 py-1.5 bg-white border border-emerald-300 hover:bg-emerald-50 rounded-lg text-xs font-semibold text-emerald-800 transition-colors shadow-2xs"
+            className="px-3 py-1.5 bg-white border border-emerald-300 hover:bg-emerald-50 rounded-lg text-xs font-semibold text-emerald-800 transition-colors shadow-2xs text-center"
           >
             Test Genuine Notice (Pass)
           </button>
           <button
             onClick={handleTestTampered}
             disabled={loading}
-            className="px-3 py-1.5 bg-white border border-red-300 hover:bg-red-50 rounded-lg text-xs font-semibold text-red-800 transition-colors shadow-2xs"
+            className="px-3 py-1.5 bg-white border border-red-300 hover:bg-red-50 rounded-lg text-xs font-semibold text-red-800 transition-colors shadow-2xs text-center"
           >
             Test Tampered Notice (Fail)
           </button>

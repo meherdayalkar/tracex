@@ -36,15 +36,15 @@ export default function ScanHistory({ onSelectScan }) {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-3 sm:p-6 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
             <Search className="w-3.5 h-3.5 text-slate-400" />
             <span>Inspection Surveillance Log</span>
           </div>
-          <h2 className="text-xl font-bold text-slate-900">Scan & Audit History</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900">Scan & Audit History</h2>
           <p className="text-xs text-slate-600 mt-1">
             Centralized repository of packaging scans evaluated under Legal Metrology Rules, 2011.
           </p>
@@ -52,15 +52,15 @@ export default function ScanHistory({ onSelectScan }) {
 
         {/* Actions & Filters */}
         <div className="flex flex-wrap items-center gap-2">
-          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
-            <div className="relative">
+          <form onSubmit={handleSearchSubmit} className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <div className="relative flex-1 sm:flex-none">
               <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search product or brand..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs w-44 sm:w-56 focus:ring-1 focus:ring-slate-800 outline-none shadow-2xs"
+                className="pl-8 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs w-full sm:w-56 focus:ring-1 focus:ring-slate-800 outline-none shadow-2xs"
               />
             </div>
 

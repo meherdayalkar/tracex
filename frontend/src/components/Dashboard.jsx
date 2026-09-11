@@ -46,6 +46,13 @@ export default function Dashboard({ onSelectManufacturer }) {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState('All India');
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchStats = async (region = selectedRegion) => {
     setLoading(true);
@@ -79,15 +86,15 @@ export default function Dashboard({ onSelectManufacturer }) {
   const COLORS = ['#059669', '#DC2626'];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-3 sm:p-6 max-w-6xl mx-auto space-y-4 sm:space-y-6">
       {/* Header with Region Filter & CSV Export */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
             <BarChart3 className="w-3.5 h-3.5 text-slate-400" />
             <span>National Surveillance Intelligence</span>
           </div>
-          <h2 className="text-xl font-bold text-slate-900">National Packaging Compliance Dashboard</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900">National Packaging Compliance Dashboard</h2>
           <p className="text-xs text-slate-600 mt-1">
             Aggregated market surveillance metrics across audited retail packaging categories.
           </p>
@@ -129,7 +136,7 @@ export default function Dashboard({ onSelectManufacturer }) {
       </div>
 
       {/* KPI Cards with Animated Count-Up Numbers */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Scans */}
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
           <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
@@ -184,9 +191,9 @@ export default function Dashboard({ onSelectManufacturer }) {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Violation Types Bar Chart */}
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
+        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
           <div className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-3">
             Top Contravention Categories in {selectedRegion}
           </div>
@@ -195,14 +202,14 @@ export default function Dashboard({ onSelectManufacturer }) {
               <BarChart
                 data={stats.violation_breakdown}
                 layout="vertical"
-                margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
+                margin={{ top: 5, right: isMobile ? 15 : 30, left: isMobile ? 10 : 40, bottom: 5 }}
               >
                 <XAxis type="number" tick={{ fontSize: 11, fill: '#64748B' }} />
                 <YAxis 
                   type="category" 
                   dataKey="rule" 
-                  tick={{ fontSize: 10, fill: '#334155' }} 
-                  width={140}
+                  tick={{ fontSize: isMobile ? 9 : 10, fill: '#334155' }} 
+                  width={isMobile ? 105 : 140}
                 />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#0F172A', color: '#fff', borderRadius: '6px', fontSize: '11px' }} 

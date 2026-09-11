@@ -92,42 +92,42 @@ export default function ConsumerView({ onScanComplete }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6">
+    <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Top Consumer Sub-Navigation Bar */}
-      <div className="flex items-center justify-center gap-1.5 p-1 bg-slate-200/80 rounded-xl max-w-md mx-auto mb-6 border border-slate-300">
+      <div className="flex items-center justify-center gap-1 sm:gap-1.5 p-1 bg-slate-200/80 rounded-xl max-w-md mx-auto mb-5 sm:mb-6 border border-slate-300">
         <button
           onClick={() => setActiveSubTab('scan')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSubTab === 'scan'
               ? 'bg-white text-slate-900 shadow-xs border border-slate-300'
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          <Camera className="w-3.5 h-3.5 text-amber-500" />
+          <Camera className="w-3.5 h-3.5 text-amber-500 shrink-0" />
           <span>Product Scanner</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('compare')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSubTab === 'compare'
               ? 'bg-white text-slate-900 shadow-xs border border-slate-300'
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          <Columns3 className="w-3.5 h-3.5 text-indigo-500" />
+          <Columns3 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
           <span>Quick Compare</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('pantry')}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+          className={`flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             activeSubTab === 'pantry'
               ? 'bg-white text-slate-900 shadow-xs border border-slate-300'
               : 'text-slate-600 hover:text-slate-900'
           }`}
         >
-          <Package className="w-3.5 h-3.5 text-emerald-600" />
+          <Package className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
           <span>My Pantry</span>
         </button>
       </div>
@@ -142,17 +142,17 @@ export default function ConsumerView({ onScanComplete }) {
       {activeSubTab === 'scan' && (
         <div>
           {/* Header */}
-          <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+          <div className="text-center mb-5 sm:mb-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
               Consumer Product Label Check
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-lg mx-auto">
               Verify if packaged food, grocery, or commodities follow Indian consumer laws, pricing rules, and shelf-life norms.
             </p>
           </div>
 
           {/* Quick Demo Presets */}
-          <div className="bg-slate-100/80 border border-slate-300/80 rounded-xl p-3.5 mb-6">
+          <div className="bg-slate-100/80 border border-slate-300/80 rounded-xl p-3 sm:p-3.5 mb-5 sm:mb-6">
             <div className="text-xs font-semibold text-slate-700 mb-2 flex items-center justify-between">
               <span>⚡ Instant Demo Presets:</span>
               <span className="text-[11px] text-slate-500 font-normal">Click to test without camera</span>
@@ -215,7 +215,7 @@ export default function ConsumerView({ onScanComplete }) {
             whileHover={{ scale: 1.005 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-slate-300 hover:border-slate-400 bg-white rounded-2xl p-6 text-center cursor-pointer transition-all shadow-xs hover:shadow-sm"
+            className="border-2 border-dashed border-slate-300 hover:border-slate-400 bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all shadow-xs hover:shadow-sm"
           >
             <input 
               type="file" 
@@ -224,20 +224,20 @@ export default function ConsumerView({ onScanComplete }) {
               accept="image/*" 
               className="hidden" 
             />
-            <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-700 mb-3">
-              <Camera className="w-6 h-6" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-700 mb-2.5 sm:mb-3">
+              <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <h3 className="text-sm font-semibold text-slate-900">
               {loading ? 'Scanning & Analyzing Packaging...' : 'Take a photo or upload product label'}
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
               Supports clear photos of the back panel containing MRP, Net Weight, and Manufacturer details.
             </p>
           </motion.div>
 
           {/* Scanning Animation (Laser sweep + rotating OCR messages) */}
           {loading && (
-            <div className="mt-6">
+            <div className="mt-5 sm:mt-6">
               <ScanningAnimation previewUrl={previewUrl} />
             </div>
           )}
@@ -249,23 +249,23 @@ export default function ConsumerView({ onScanComplete }) {
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.35, ease: 'easeOut' }}
-                className="mt-6 space-y-4"
+                className="mt-5 sm:mt-6 space-y-4"
               >
                 {/* Duplicate / Recall Check Alert */}
                 <DuplicateCheck currentScan={scanResult} />
 
                 {/* Big Plain-Language Status Card with SVG Draw Animation */}
-                <div className={`border rounded-2xl p-6 shadow-sm transition-all ${
+                <div className={`border rounded-2xl p-4 sm:p-6 shadow-sm transition-all ${
                   scanResult.is_compliant 
                     ? 'bg-emerald-50/80 border-emerald-300' 
                     : 'bg-red-50/80 border-red-300'
                 }`}>
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3.5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start sm:items-center gap-3">
                       {scanResult.is_compliant ? (
-                        <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5 sm:mt-0">
                           {/* Animated SVG Checkmark */}
-                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <motion.path
                               initial={{ pathLength: 0 }}
                               animate={{ pathLength: 1 }}
@@ -275,9 +275,9 @@ export default function ConsumerView({ onScanComplete }) {
                           </svg>
                         </div>
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 shrink-0 mt-0.5 sm:mt-0">
                           {/* Animated SVG X */}
-                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <motion.path
                               initial={{ pathLength: 0 }}
                               animate={{ pathLength: 1 }}
@@ -288,7 +288,7 @@ export default function ConsumerView({ onScanComplete }) {
                         </div>
                       )}
                       <div>
-                        <h2 className="text-lg font-bold text-slate-900">
+                        <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-tight">
                           {scanResult.is_compliant 
                             ? '✅ This product label looks legal and complete' 
                             : '⚠️ Required legal packaging information is missing'}

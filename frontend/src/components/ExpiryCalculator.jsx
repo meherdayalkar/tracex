@@ -126,10 +126,10 @@ export default function ExpiryCalculator({ extractedData, productName, onSaveToP
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs transition-all">
-      <div className="flex items-center justify-between mb-3">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs transition-all">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          <Calendar className="w-4 h-4 text-slate-400" />
+          <Calendar className="w-4 h-4 text-slate-400 shrink-0" />
           <span>Intelligent Expiry & Shelf-Life Calculator</span>
         </div>
 
@@ -146,7 +146,7 @@ export default function ExpiryCalculator({ extractedData, productName, onSaveToP
 
       {/* Date Testing Slider/Input Bar */}
       {useCustomDate && (
-        <div className="mb-4 p-2.5 bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-between gap-3 text-xs">
+        <div className="mb-4 p-2.5 bg-slate-100 rounded-lg border border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3 text-xs">
           <span className="text-slate-600 font-medium">Test As If Today Were:</span>
           <input
             type="date"
@@ -163,13 +163,13 @@ export default function ExpiryCalculator({ extractedData, productName, onSaveToP
           <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-slate-100 pb-3">
             <div>
               <div className="text-[11px] text-slate-500">Estimated Expiry Timeline:</div>
-              <div className="text-xl font-bold text-slate-900 tracking-tight">
+              <div className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                 This product expires around: <span className="text-indigo-950">{result.formattedExpiry}</span>
               </div>
             </div>
 
             {/* Freshness Status Pill */}
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium ${result.badgeColor}`}>
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-medium self-start sm:self-auto ${result.badgeColor}`}>
               <span className={`w-2 h-2 rounded-full ${result.dotColor}`}></span>
               <span>{result.statusText}</span>
             </div>

@@ -31,12 +31,12 @@ I request the Enforcement Directorate to examine this packaging discrepancy unde
   };
 
   return (
-    <div className="mt-6 border border-amber-300 bg-amber-50/70 rounded-xl p-5 text-slate-800">
+    <div className="mt-5 sm:mt-6 border border-amber-300 bg-amber-50/70 rounded-xl p-3.5 sm:p-5 text-slate-800">
       <div className="flex items-start gap-3">
         <div className="p-2 bg-amber-100 rounded-lg text-amber-800 shrink-0">
           <AlertTriangle className="w-5 h-5" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <h4 className="text-sm font-semibold text-slate-900">
             Report this to National Consumer Helpline (NCH)
           </h4>
@@ -49,10 +49,10 @@ I request the Enforcement Directorate to examine this packaging discrepancy unde
             {complaintDraft}
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
+          <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
             <button
               onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-sm"
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied to Clipboard' : 'Copy Complaint Draft'}</span>
@@ -62,13 +62,13 @@ I request the Enforcement Directorate to examine this packaging discrepancy unde
               href="https://consumerhelpline.gov.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors text-center"
             >
               <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
               <span>Open consumerhelpline.gov.in</span>
             </a>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-300">
+            <div className="inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-300 text-center">
               <PhoneCall className="w-3.5 h-3.5 text-amber-700" />
               <span>Toll-Free Helpline: 1912</span>
             </div>

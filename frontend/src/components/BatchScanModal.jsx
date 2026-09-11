@@ -74,16 +74,16 @@ export default function BatchScanModal({ isOpen, onClose, onCompleteBatch }) {
   const violationCount = results.filter(r => !r.is_compliant).length;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white border border-slate-300 rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white border border-slate-300 rounded-2xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         
         {/* Header */}
-        <div className="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between">
+        <div className="bg-[#0F172A] text-white px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2.5">
-            <Layers className="w-5 h-5 text-amber-400" />
+            <Layers className="w-5 h-5 text-amber-400 shrink-0" />
             <div>
-              <h3 className="text-sm font-bold tracking-tight">Market Raid Bulk / Batch Audit Mode</h3>
-              <p className="text-[11px] text-slate-400">Sequential optical verification of multi-product market visits</p>
+              <h3 className="text-xs sm:text-sm font-bold tracking-tight">Market Raid Bulk / Batch Audit Mode</h3>
+              <p className="text-[10px] sm:text-[11px] text-slate-400">Sequential optical verification of multi-product market visits</p>
             </div>
           </div>
           <button 
@@ -95,13 +95,13 @@ export default function BatchScanModal({ isOpen, onClose, onCompleteBatch }) {
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4 overflow-y-auto">
           {/* File Selector & Demo Trigger */}
           {results.length === 0 && !processing && (
             <div className="space-y-3">
               <div 
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-300 hover:border-slate-400 bg-slate-50/50 rounded-xl p-6 text-center cursor-pointer transition-all"
+                className="border-2 border-dashed border-slate-300 hover:border-slate-400 bg-slate-50/50 rounded-xl p-4 sm:p-6 text-center cursor-pointer transition-all"
               >
                 <input 
                   type="file" 
@@ -120,11 +120,11 @@ export default function BatchScanModal({ isOpen, onClose, onCompleteBatch }) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2">
                 <button
                   type="button"
                   onClick={handleSimulateBatch}
-                  className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                  className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors text-center"
                 >
                   ⚡ Simulate 3 Market Raid Samples
                 </button>
@@ -133,7 +133,7 @@ export default function BatchScanModal({ isOpen, onClose, onCompleteBatch }) {
                   <button
                     type="button"
                     onClick={handleStartRealBatch}
-                    className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-semibold hover:bg-slate-800 transition-colors"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-semibold hover:bg-slate-800 transition-colors"
                   >
                     <Play className="w-3.5 h-3.5 text-amber-400" />
                     <span>Run Batch ({selectedFiles.length})</span>
@@ -225,19 +225,19 @@ export default function BatchScanModal({ isOpen, onClose, onCompleteBatch }) {
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2 border-t border-slate-100">
                 <button
                   onClick={() => {
                     setResults([]);
                     setSelectedFiles([]);
                   }}
-                  className="px-3.5 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                  className="px-3.5 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50 text-center"
                 >
                   Start New Batch
                 </button>
                 <button
                   onClick={onClose}
-                  className="px-4 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-semibold hover:bg-slate-800"
+                  className="px-4 py-1.5 rounded-lg bg-[#0F172A] text-white text-xs font-semibold hover:bg-slate-800 text-center"
                 >
                   Done
                 </button>

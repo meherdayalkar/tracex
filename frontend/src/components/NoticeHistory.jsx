@@ -54,14 +54,14 @@ export default function NoticeHistory() {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
+    <div className="p-3 sm:p-6 max-w-6xl mx-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
             <Mail className="w-3.5 h-3.5 text-slate-400" />
             <span>Statutory Enforcement Notices</span>
           </div>
-          <h2 className="text-xl font-bold text-slate-900">Formal Notices & Enforcement Case Tracking</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900">Formal Notices & Enforcement Case Tracking</h2>
           <p className="text-xs text-slate-600 mt-1">
             Track notice delivery lifecycle from issuance to acknowledgement, company response, and compounding settlement.
           </p>
@@ -69,7 +69,7 @@ export default function NoticeHistory() {
 
         <button
           onClick={fetchNotices}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+          className="inline-flex items-center self-start sm:self-auto gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           <span>Refresh</span>
