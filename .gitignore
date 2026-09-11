@@ -1,0 +1,71 @@
+# ==============================================================================
+# TraceX - Root .gitignore (Strict Production Security)
+# ==============================================================================
+
+# Environment Secrets (NEVER commit credentials, passwords, or API keys)
+.env
+.env.*
+*.env
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+!.env.example
+!backend/.env.example
+!frontend/.env.example
+
+# Python virtual environment
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python cache & compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Cryptographic Private & Public Keys (Protect Inspectorate Root Keys)
+backend/keys/*.pem
+*.pem
+*.key
+
+# Local SQLite Database & Storage
+backend/tracex.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Ephemeral File Storage (preserve directories via .gitkeep)
+backend/storage/reports/*.pdf
+backend/storage/notices/*.pdf
+backend/storage/uploads/*
+!backend/storage/reports/.gitkeep
+!backend/storage/notices/.gitkeep
+!backend/storage/uploads/.gitkeep
+
+# Node / Frontend Build & Dependencies
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+dist-ssr/
+frontend/dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS & Editor Metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,38 @@
+# ==============================================================================
+# TraceX Render Infrastructure Blueprint
+# Deploys FastAPI Backend + Managed PostgreSQL on Render Free Tier
+# ==============================================================================
+services:
+  - type: web
+    name: tracex-backend
+    env: python
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: FRONTEND_URL
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tracex-db
+          property: connectionString
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: FROM_EMAIL
+        value: notices@consumerhelpline.gov.in
+
+databases:
+  - name: tracex-db
+    databaseName: tracex
+    user: tracex_user
+    plan: free
+    region: oregon
