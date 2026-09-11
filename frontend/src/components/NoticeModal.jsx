@@ -227,18 +227,24 @@ export default function NoticeModal({ scan, isOpen, onClose, onNoticeSent }) {
             </div>
 
             {/* Email Dispatch Mode Feedback */}
-            {noticeResult.email_status?.mode === 'LIVE_SMTP_TLS' ? (
+            {noticeResult.email_status?.success && noticeResult.email_status?.mode !== 'SIMULATED_AUDIT_LOG' ? (
               <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex items-start gap-2.5">
                 <Mail className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold">Live Email Transmitted:</span> Sent to <b>{noticeResult.recipient_email}</b> via authenticated SMTP/TLS.
+                  <span className="font-semibold">Live Email Transmitted:</span> Sent to <b>{noticeResult.recipient_email}</b> via {noticeResult.email_status?.mode?.includes('HTTPS') ? 'Secure HTTPS Email API (Port 443)' : 'Authenticated SMTP / TLS'}.
+                  <div className="text-[11px] text-emerald-700 mt-0.5">{noticeResult.email_status?.message}</div>
                 </div>
               </div>
             ) : noticeResult.email_status?.mode === 'LIVE_SMTP_ERROR' ? (
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-900 flex items-start gap-2.5">
-                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-semibold">SMTP Transmission Error:</span> {noticeResult.email_status?.message || 'Could not connect to mail server.'}
+              <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-950 flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <div>
+                    <span className="font-bold text-amber-900">Document Signed & Logged (Cloud Host Outbound Notice):</span>
+                  </div>
+                  <p className="text-[11px] text-amber-800 leading-relaxed">
+                    {noticeResult.email_status?.message || 'Could not connect to external mail server.'}
+                  </p>
                 </div>
               </div>
             ) : (
@@ -249,7 +255,7 @@ export default function NoticeModal({ scan, isOpen, onClose, onNoticeSent }) {
                     <span className="font-semibold text-amber-900">Prototype Sandbox Mode:</span> Notice was recorded in the database and the court-admissible PDF was signed.
                   </div>
                   <p className="text-[11px] text-amber-800">
-                    Live inbox delivery requires setting your Gmail address and 16-character Google App Password in <code className="bg-amber-100 px-1 py-0.5 rounded font-mono text-[10px]">backend/.env</code>.
+                    Live delivery uses authenticated SMTP or Resend API (<code className="bg-amber-100 px-1 py-0.5 rounded font-mono text-[10px]">RESEND_API_KEY</code>).
                   </p>
                 </div>
               </div>
