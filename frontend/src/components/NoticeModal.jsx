@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Send, ShieldCheck, CheckCircle2, AlertTriangle, FileText, Mail, Info } from 'lucide-react';
 import { apiUrl } from '../config/api';
 
-export default function NoticeModal({ scan, isOpen, onClose, onNoticeSent }) {
+export default function NoticeModal({ scan, isOpen, onClose, onNoticeSent, authToken, currentUser }) {
   const [recipientEmail, setRecipientEmail] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [responseDeadline, setResponseDeadline] = useState('15 Calendar Days');
@@ -45,8 +45,14 @@ export default function NoticeModal({ scan, isOpen, onClose, onNoticeSent }) {
       formData.append('response_deadline', responseDeadline);
       formData.append('notes', notes);
 
+      const headers = {};
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
       const res = await fetch(apiUrl('/api/notices/generate'), {
         method: 'POST',
+        headers: headers,
         body: formData
       });
       const data = await res.json();

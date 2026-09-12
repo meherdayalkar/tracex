@@ -17,9 +17,16 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-
+from pydantic import BaseModel
 from database import engine, Base, get_db, get_db_type
-from models import ScanRecord, FormalNoticeRecord
+from models import ScanRecord, FormalNoticeRecord, User
+from auth import (
+    hash_password,
+    verify_password,
+    create_access_token,
+    get_current_user,
+    get_optional_user
+)
 from rules_engine import evaluate_rules
 from vision_extractor import extract_label_from_image, ExtractionResult
 from crypto_signer import (
@@ -98,6 +105,140 @@ def get_public_key():
         "algorithm": "RSA-2048",
         "public_key_pem": get_public_key_pem(),
         "authority": "Legal Metrology Root Inspectorate Authority (DoCA)"
+    }
+
+# ==========================================
+# Authentication & Officer Management
+# ==========================================
+
+class UserRegisterRequest(BaseModel):
+    email: str
+    full_name: str
+    password: str
+    badge_number: str
+    designation: Optional[str] = "Legal Metrology Officer"
+    jurisdiction: Optional[str] = "National Directorate"
+    role: Optional[str] = "inspector"
+
+class UserLoginRequest(BaseModel):
+    email: str
+    password: str
+
+@app.post("/api/auth/register")
+def register_officer(req: UserRegisterRequest, db: Session = Depends(get_db)):
+    """Registers a new statutory Legal Metrology Officer / Inspector."""
+    email_clean = req.email.strip().lower()
+    badge_clean = req.badge_number.strip().upper()
+    name_clean = req.full_name.strip()
+
+    if not email_clean or "@" not in email_clean:
+        raise HTTPException(status_code=400, detail="A valid official department email is required.")
+    if len(req.password) < 6:
+        raise HTTPException(status_code=400, detail="Officer password must be at least 6 characters long.")
+    if not badge_clean:
+        raise HTTPException(status_code=400, detail="Department badge number is required.")
+    if not name_clean:
+        raise HTTPException(status_code=400, detail="Full officer name is required.")
+
+    existing_email = db.query(User).filter(User.email == email_clean).first()
+    if existing_email:
+        raise HTTPException(status_code=400, detail="An officer account with this email address already exists.")
+
+    existing_badge = db.query(User).filter(User.badge_number == badge_clean).first()
+    if existing_badge:
+        raise HTTPException(status_code=400, detail="An officer account with this department badge number already exists.")
+
+    new_user = User(
+        email=email_clean,
+        full_name=name_clean,
+        hashed_password=hash_password(req.password),
+        badge_number=badge_clean,
+        designation=req.designation.strip() if req.designation else "Legal Metrology Officer",
+        jurisdiction=req.jurisdiction.strip() if req.jurisdiction else "National Directorate",
+        role=req.role.strip().lower() if req.role in ["admin", "inspector"] else "inspector",
+        is_active=True
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    token = create_access_token({
+        "sub": new_user.id,
+        "email": new_user.email,
+        "full_name": new_user.full_name,
+        "badge_number": new_user.badge_number,
+        "role": new_user.role,
+        "designation": new_user.designation,
+        "jurisdiction": new_user.jurisdiction
+    })
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": {
+            "id": new_user.id,
+            "email": new_user.email,
+            "full_name": new_user.full_name,
+            "badge_number": new_user.badge_number,
+            "designation": new_user.designation,
+            "jurisdiction": new_user.jurisdiction,
+            "role": new_user.role
+        }
+    }
+
+@app.post("/api/auth/login")
+def login_officer(req: UserLoginRequest, db: Session = Depends(get_db)):
+    """Authenticates an officer and returns a cryptographically signed JWT token."""
+    email_clean = req.email.strip().lower()
+    user = db.query(User).filter(User.email == email_clean).first()
+    if not user or not verify_password(req.password, user.hashed_password):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid official email or officer password. Please verify credentials."
+        )
+
+    if not user.is_active:
+        raise HTTPException(
+            status_code=403,
+            detail="Officer account has been suspended or deactivated. Contact National Directorate."
+        )
+
+    token = create_access_token({
+        "sub": user.id,
+        "email": user.email,
+        "full_name": user.full_name,
+        "badge_number": user.badge_number,
+        "role": user.role,
+        "designation": user.designation,
+        "jurisdiction": user.jurisdiction
+    })
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "full_name": user.full_name,
+            "badge_number": user.badge_number,
+            "designation": user.designation,
+            "jurisdiction": user.jurisdiction,
+            "role": user.role
+        }
+    }
+
+@app.get("/api/auth/me")
+def get_authenticated_officer_profile(current_user: User = Depends(get_current_user)):
+    """Returns verified profile and credentials of currently logged-in inspector."""
+    return {
+        "id": current_user.id,
+        "email": current_user.email,
+        "full_name": current_user.full_name,
+        "badge_number": current_user.badge_number,
+        "designation": current_user.designation,
+        "jurisdiction": current_user.jurisdiction,
+        "role": current_user.role,
+        "created_at": current_user.created_at.isoformat() if current_user.created_at else None
     }
 
 @app.post("/api/scan")
@@ -347,6 +488,7 @@ def create_formal_notice(
     company_name: Optional[str] = Form(None),
     response_deadline: Optional[str] = Form("15 Calendar Days"),
     notes: Optional[str] = Form(None),
+    current_user: Optional[User] = Depends(get_optional_user),
     db: Session = Depends(get_db)
 ):
     """
@@ -365,6 +507,12 @@ def create_formal_notice(
     checks = eval_res.get("checks", [])
     violations = [c for c in checks if c.get("status") == "fail"]
 
+    insp_ref = (
+        f"INSP/DOCA/{current_user.badge_number}"
+        if current_user
+        else "INSP/DOCA/DEL/2026/049"
+    )
+
     notice_meta = {
         "id": notice_id,
         "scan_id": scan_id,
@@ -373,7 +521,7 @@ def create_formal_notice(
         "recipient_email": recipient_email,
         "issued_at": datetime.now().strftime("%d %B %Y"),
         "response_deadline": response_deadline or "15 Calendar Days",
-        "inspector_ref": "INSP/DOCA/DEL/2026/049",
+        "inspector_ref": insp_ref,
         "violations": violations
     }
 
@@ -396,7 +544,7 @@ def create_formal_notice(
         recipient_email=recipient_email,
         company_name=comp_name,
         response_deadline=response_deadline or "15 Calendar Days",
-        inspector_ref="INSP/DOCA/DEL/2026/049",
+        inspector_ref=insp_ref,
         sha256_hash=sha256_hash,
         signature_hex=signature_hex,
         pdf_filename=pdf_filename,

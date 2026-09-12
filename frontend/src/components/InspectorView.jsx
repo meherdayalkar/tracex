@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Scan, History, Mail, ShieldCheck, BarChart3, Upload, FileText, 
-  Send, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, KeyRound, Layers
+  Send, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, KeyRound, Layers, LogOut, UserCheck
 } from 'lucide-react';
 import StatusPill from './StatusPill';
 import NoticeModal from './NoticeModal';
@@ -12,7 +12,7 @@ import Dashboard from './Dashboard';
 import BatchScanModal from './BatchScanModal';
 import { apiUrl } from '../config/api';
 
-export default function InspectorView() {
+export default function InspectorView({ currentUser, authToken, onLogout }) {
   const [activeTab, setActiveTab] = useState('scan');
   const [currentScan, setCurrentScan] = useState(null);
   const [activePreset, setActivePreset] = useState('tata');
@@ -107,6 +107,38 @@ export default function InspectorView() {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
             <span>Enforcement Online</span>
           </div>
+
+          {/* Officer Identity Card */}
+          {currentUser && (
+            <div className="mt-3 p-2.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-left">
+              <div className="flex items-center justify-between gap-1 mb-1">
+                <span className="text-[9px] uppercase font-bold text-amber-400 tracking-wider">
+                  Active Officer
+                </span>
+                <span className="px-1.5 py-0.5 text-[8px] font-mono-audit bg-amber-400/20 text-amber-300 rounded font-bold">
+                  {currentUser.role === 'admin' ? 'CHIEF' : 'INSPECTOR'}
+                </span>
+              </div>
+              <div className="text-xs font-semibold text-white truncate">
+                {currentUser.full_name}
+              </div>
+              <div className="text-[10px] font-mono-audit text-slate-300 mt-0.5 truncate">
+                Badge: <span className="text-amber-300">{currentUser.badge_number}</span>
+              </div>
+              <div className="text-[10px] text-slate-400 truncate mt-0.5">
+                {currentUser.jurisdiction} • {currentUser.designation}
+              </div>
+              {onLogout && (
+                <button
+                  onClick={onLogout}
+                  className="mt-2 w-full py-1 px-2 text-[10px] text-slate-300 hover:text-white bg-slate-700/60 hover:bg-slate-700 rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <LogOut className="w-3 h-3 text-red-400" />
+                  <span>Sign Out to Consumer</span>
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Nav Links */}
@@ -458,6 +490,8 @@ export default function InspectorView() {
         scan={currentScan}
         isOpen={isNoticeModalOpen}
         onClose={() => setIsNoticeModalOpen(false)}
+        authToken={authToken}
+        currentUser={currentUser}
         onNoticeSent={() => {
           // Keep active state
         }}

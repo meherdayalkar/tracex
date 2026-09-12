@@ -3,10 +3,25 @@ SQLAlchemy ORM Models
 Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
 """
 
+import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, Boolean, Integer, DateTime, JSON, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    email = Column(String(255), unique=True, index=True, nullable=False)
+    full_name = Column(String(255), nullable=False)
+    hashed_password = Column(String(255), nullable=False)
+    badge_number = Column(String(100), unique=True, index=True, nullable=False)
+    designation = Column(String(100), default="Legal Metrology Officer", nullable=False)
+    jurisdiction = Column(String(100), default="National Directorate", nullable=False)
+    role = Column(String(50), default="inspector", nullable=False)  # "admin" or "inspector"
+    is_active = Column(Boolean, default=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
 class ScanRecord(Base):
     __tablename__ = "scans"

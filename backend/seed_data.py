@@ -20,11 +20,12 @@ if sys.stdout.encoding != 'utf-8':
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from database import engine, Base, SessionLocal
-from models import ScanRecord, FormalNoticeRecord
+from models import ScanRecord, FormalNoticeRecord, User
 from rules_engine import evaluate_rules
 from vision_extractor import extract_label_from_image
 from crypto_signer import init_keys, sign_document_bytes
 from pdf_generator import generate_compliance_report_pdf, generate_formal_notice_pdf, REPORTS_DIR, NOTICES_DIR
+from auth import hash_password
 
 def seed(drop=True):
     if drop:
@@ -34,6 +35,20 @@ def seed(drop=True):
 
     print("Seeding TraceX Database...")
     init_keys()
+
+    # 0. Chief Metrology Inspector (Admin)
+    admin_user = User(
+        id="USR-DOCA-HQ-001",
+        email="admin@doca.gov.in",
+        full_name="Shri R. K. Sharma (Chief Metrology Inspector)",
+        hashed_password=hash_password("Admin@TraceX2026"),
+        badge_number="DOCA-HQ-001",
+        designation="Director of Enforcement",
+        jurisdiction="National Directorate",
+        role="admin",
+        is_active=True
+    )
+    db.add(admin_user)
 
     # 1. Compliant Product: Tata Salt
     scan1_id = "TRX-A4F291"
@@ -202,8 +217,37 @@ def seed(drop=True):
     print(f"✔ Successfully seeded 3 scan records and 1 signed formal notice ({notice1_id})!")
     db.close()
 
+def seed_admin_if_empty():
+    """Ensures at least the default Chief Inspector / Admin account exists."""
+    db = SessionLocal()
+    try:
+        user_count = db.query(User).count()
+        if user_count == 0:
+            print("[AUTO-SEED] Seeding default Chief Metrology Inspector (admin@doca.gov.in)...")
+            admin_user = User(
+                id="USR-DOCA-HQ-001",
+                email="admin@doca.gov.in",
+                full_name="Shri R. K. Sharma (Chief Metrology Inspector)",
+                hashed_password=hash_password("Admin@TraceX2026"),
+                badge_number="DOCA-HQ-001",
+                designation="Director of Enforcement",
+                jurisdiction="National Directorate",
+                role="admin",
+                is_active=True
+            )
+            db.add(admin_user)
+            db.commit()
+            print("✔ Default Admin officer account seeded successfully.")
+        else:
+            print(f"[AUTO-SEED] Database already contains {user_count} officer account(s).")
+    except Exception as e:
+        print(f"[AUTO-SEED] Officer seeding notice: {e}")
+    finally:
+        db.close()
+
 def seed_if_empty():
-    """Seeds the database only if there are no existing scans (safe for cloud cold-starts)."""
+    """Seeds the database only if there are no existing scans or admin (safe for cloud cold-starts)."""
+    seed_admin_if_empty()
     db = SessionLocal()
     try:
         count = db.query(ScanRecord).count()
