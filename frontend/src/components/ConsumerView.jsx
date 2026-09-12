@@ -13,6 +13,7 @@ import MyPantry, { saveItemToPantry } from './MyPantry';
 import QuickCompare from './QuickCompare';
 import DuplicateCheck from './DuplicateCheck';
 import ScanningAnimation from './ScanningAnimation';
+import CameraCaptureModal from './CameraCaptureModal';
 import { apiUrl } from '../config/api';
 
 export default function ConsumerView({ onScanComplete }) {
@@ -23,7 +24,30 @@ export default function ConsumerView({ onScanComplete }) {
   const [speaking, setSpeaking] = useState(false);
   const [openWhy, setOpenWhy] = useState(false);
   const [openAction, setOpenAction] = useState(false);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const fileInputRef = useRef(null);
+  const nativeCameraRef = useRef(null);
+
+  const processImageFile = async (file) => {
+    if (!file) return;
+    setPreviewUrl(URL.createObjectURL(file));
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(apiUrl('/api/scan'), {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      setScanResult(data);
+      if (onScanComplete) onScanComplete(data);
+    } catch (err) {
+      console.error('Upload scan failed:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handlePresetSelect = async (preset) => {
     setLoading(true);
@@ -45,26 +69,10 @@ export default function ConsumerView({ onScanComplete }) {
     }
   };
 
-  const handleFileUpload = async (e) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    setPreviewUrl(URL.createObjectURL(file));
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await fetch(apiUrl('/api/scan'), {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      setScanResult(data);
-      if (onScanComplete) onScanComplete(data);
-    } catch (err) {
-      console.error('Upload scan failed:', err);
-    } finally {
-      setLoading(false);
+    if (file) {
+      processImageFile(file);
     }
   };
 
@@ -210,13 +218,42 @@ export default function ConsumerView({ onScanComplete }) {
             </div>
           </div>
 
-          {/* Photo Upload Zone */}
-          <motion.div 
-            whileHover={{ scale: 1.005 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-slate-300 hover:border-slate-400 bg-white rounded-2xl p-4 sm:p-6 text-center cursor-pointer transition-all shadow-xs hover:shadow-sm"
-          >
+          {/* Photo & Live Camera Input Zone */}
+          <div className="border-2 border-dashed border-slate-300 bg-white rounded-2xl p-4 sm:p-6 text-center shadow-xs transition-all">
+            <div className="w-12 h-12 bg-amber-50 rounded-full border border-amber-200/80 flex items-center justify-center mx-auto text-amber-600 mb-2.5 sm:mb-3 shadow-xs">
+              <Camera className="w-6 h-6" />
+            </div>
+
+            <h3 className="text-sm sm:text-base font-bold text-slate-900">
+              {loading ? 'Scanning & Analyzing Packaging...' : 'Scan Product Packaging Label'}
+            </h3>
+            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto mb-4">
+              Open your camera to aim at the package, or upload a saved photo of the back panel.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 max-w-md mx-auto">
+              <button
+                type="button"
+                onClick={() => setIsCameraModalOpen(true)}
+                disabled={loading}
+                className="w-full sm:w-auto flex-1 py-2.5 px-4 bg-[#0F172A] hover:bg-slate-800 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                <Camera className="w-4 h-4 text-amber-400" />
+                <span>Open Live Camera</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={loading}
+                className="w-full sm:w-auto flex-1 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-300 transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                <Upload className="w-4 h-4 text-slate-500" />
+                <span>Upload from Files</span>
+              </button>
+            </div>
+
+            {/* Hidden File Inputs */}
             <input 
               type="file" 
               ref={fileInputRef} 
@@ -224,16 +261,15 @@ export default function ConsumerView({ onScanComplete }) {
               accept="image/*" 
               className="hidden" 
             />
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-700 mb-2.5 sm:mb-3">
-              <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <h3 className="text-sm font-semibold text-slate-900">
-              {loading ? 'Scanning & Analyzing Packaging...' : 'Take a photo or upload product label'}
-            </h3>
-            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-              Supports clear photos of the back panel containing MRP, Net Weight, and Manufacturer details.
-            </p>
-          </motion.div>
+            <input 
+              type="file" 
+              ref={nativeCameraRef} 
+              onChange={handleFileUpload} 
+              accept="image/*" 
+              capture="environment"
+              className="hidden" 
+            />
+          </div>
 
           {/* Scanning Animation (Laser sweep + rotating OCR messages) */}
           {loading && (
@@ -453,6 +489,13 @@ export default function ConsumerView({ onScanComplete }) {
           </AnimatePresence>
         </div>
       )}
+
+      {/* Live Camera Viewfinder Modal */}
+      <CameraCaptureModal
+        isOpen={isCameraModalOpen}
+        onClose={() => setIsCameraModalOpen(false)}
+        onCapture={processImageFile}
+      />
     </div>
   );
 }

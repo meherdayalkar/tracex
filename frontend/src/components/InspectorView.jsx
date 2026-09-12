@@ -10,6 +10,7 @@ import NoticeHistory from './NoticeHistory';
 import VerifyNotice from './VerifyNotice';
 import Dashboard from './Dashboard';
 import BatchScanModal from './BatchScanModal';
+import CameraCaptureModal from './CameraCaptureModal';
 import { apiUrl } from '../config/api';
 
 export default function InspectorView({ currentUser, authToken, onLogout }) {
@@ -19,6 +20,7 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
   const [loading, setLoading] = useState(false);
   const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const fileInputRef = useRef(null);
 
   // Load the initial seeded compliant scan on mount so inspector doesn't see a blank page
@@ -45,11 +47,9 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
     }
   };
 
-  const handleFileUpload = async (e) => {
-    setActivePreset(null);
-    const file = e.target.files?.[0];
+  const processImageFile = async (file) => {
     if (!file) return;
-
+    setActivePreset(null);
     setLoading(true);
     try {
       const formData = new FormData();
@@ -64,6 +64,13 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
       console.error('Upload scan failed:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processImageFile(file);
     }
   };
 
@@ -299,12 +306,22 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
                 </button>
 
                 <button
+                  onClick={() => setIsCameraModalOpen(true)}
+                  disabled={loading}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                  title="Open live camera to scan physical packaging"
+                >
+                  <Camera className="w-3.5 h-3.5 text-slate-950" />
+                  <span>Open Camera</span>
+                </button>
+
+                <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={loading}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] text-white hover:bg-slate-800 text-xs font-semibold shadow-xs transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0F172A] text-white hover:bg-slate-800 text-xs font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-50"
                 >
                   <Upload className="w-3.5 h-3.5" />
-                  <span>Upload Label Photo</span>
+                  <span>Upload Photo</span>
                 </button>
                 <input 
                   type="file" 
@@ -508,6 +525,13 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
             setCurrentScan(last);
           }
         }}
+      />
+
+      {/* Live Camera Viewfinder Modal */}
+      <CameraCaptureModal
+        isOpen={isCameraModalOpen}
+        onClose={() => setIsCameraModalOpen(false)}
+        onCapture={processImageFile}
       />
     </div>
   );
