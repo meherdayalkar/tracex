@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Scan, History, Mail, ShieldCheck, BarChart3, Upload, FileText, 
-  Send, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, KeyRound, Layers, LogOut, UserCheck
+  Send, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, KeyRound, Layers, LogOut, UserCheck, Camera, Lock
 } from 'lucide-react';
 import StatusPill from './StatusPill';
 import NoticeModal from './NoticeModal';
@@ -13,7 +13,7 @@ import BatchScanModal from './BatchScanModal';
 import CameraCaptureModal from './CameraCaptureModal';
 import { apiUrl } from '../config/api';
 
-export default function InspectorView({ currentUser, authToken, onLogout }) {
+export default function InspectorView({ currentUser, authToken, onLogout, onOpenAuth }) {
   const [activeTab, setActiveTab] = useState('scan');
   const [currentScan, setCurrentScan] = useState(null);
   const [activePreset, setActivePreset] = useState('tata');
@@ -22,11 +22,6 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const fileInputRef = useRef(null);
-
-  // Load the initial seeded compliant scan on mount so inspector doesn't see a blank page
-  useEffect(() => {
-    handlePresetScan('tata');
-  }, []);
 
   const handlePresetScan = async (preset) => {
     setActivePreset(preset);
@@ -46,6 +41,11 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
       setLoading(false);
     }
   };
+
+  // Load the initial seeded compliant scan on mount so inspector doesn't see a blank page
+  useEffect(() => {
+    handlePresetScan('tata');
+  }, []);
 
   const processImageFile = async (file) => {
     if (!file) return;
@@ -142,6 +142,33 @@ export default function InspectorView({ currentUser, authToken, onLogout }) {
                 >
                   <LogOut className="w-3 h-3 text-red-400" />
                   <span>Sign Out to Consumer</span>
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Unauthenticated Session Indicator */}
+          {!currentUser && (
+            <div className="mt-3 p-2.5 bg-slate-800/90 border border-amber-400/40 rounded-xl text-left">
+              <div className="flex items-center justify-between gap-1 mb-1">
+                <span className="text-[9px] uppercase font-bold text-amber-400 tracking-wider">
+                  Officer Access
+                </span>
+                <span className="px-1.5 py-0.5 text-[8px] font-mono-audit bg-amber-400/20 text-amber-300 rounded font-bold">
+                  GUEST
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 mb-2 leading-relaxed">
+                Sign in with official credentials or 1-tap demo to issue signed notices.
+              </p>
+              {onOpenAuth && (
+                <button
+                  type="button"
+                  onClick={onOpenAuth}
+                  className="w-full py-1.5 px-2 text-[10px] text-slate-950 font-bold bg-amber-400 hover:bg-amber-300 rounded-md transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                >
+                  <Lock className="w-3 h-3 text-slate-950" />
+                  <span>Officer Sign In / Register</span>
                 </button>
               )}
             </div>

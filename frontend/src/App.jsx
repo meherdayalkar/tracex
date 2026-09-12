@@ -46,14 +46,9 @@ export default function App() {
   }, [authToken]);
 
   const handleSelectRole = (role) => {
-    if (role === 'inspector') {
-      if (currentUser && authToken) {
-        setCurrentRole('inspector');
-      } else {
-        setIsAuthModalOpen(true);
-      }
-    } else {
-      setCurrentRole('consumer');
+    setCurrentRole(role);
+    if (role === 'inspector' && (!currentUser || !authToken)) {
+      setIsAuthModalOpen(true);
     }
   };
 
@@ -136,7 +131,12 @@ export default function App() {
         {currentRole === 'consumer' ? (
           <ConsumerView />
         ) : (
-          <InspectorView currentUser={currentUser} authToken={authToken} onLogout={handleLogout} />
+          <InspectorView 
+            currentUser={currentUser} 
+            authToken={authToken} 
+            onLogout={handleLogout} 
+            onOpenAuth={() => setIsAuthModalOpen(true)}
+          />
         )}
       </div>
 

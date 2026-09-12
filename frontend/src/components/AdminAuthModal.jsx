@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   ShieldCheck, Lock, UserPlus, LogIn, AlertCircle, 
-  CheckCircle2, X, Eye, EyeOff, Sparkles, Building2, User, Award, MapPin 
+  CheckCircle2, X, Eye, EyeOff, Sparkles, Building2, Award 
 } from 'lucide-react';
 import { apiUrl } from '../config/api';
 
