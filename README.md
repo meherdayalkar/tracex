@@ -1,6 +1,6 @@
-# [TraceX] — Legal Metrology Label Compliance Scanner (SIH26034)
+# [TraceX] — Legal Metrology Label Compliance Scanner
 
-> **Official Prototype for Smart India Hackathon (SIH26034)**  
+> **Prototype for Department of Consumer Affairs (DoCA)**  
 > **Organisation**: Ministry of Consumer Affairs, Food & Public Distribution → Department of Consumer Affairs (DoCA)  
 > **Theme**: Agriculture, FoodTech & Rural Development | **Category**: Software  
 > **Statutory Citation**: Legal Metrology Act, 2009 & Legal Metrology (Packaged Commodities) Rules, 2011 (PCR 2011)

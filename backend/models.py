@@ -1,6 +1,6 @@
 """
 SQLAlchemy ORM Models
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 """
 
 import uuid

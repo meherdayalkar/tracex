@@ -1,5 +1,5 @@
 """
-TraceX - Legal Metrology Label Compliance Scanner (SIH26034)
+TraceX - Legal Metrology Label Compliance Scanner
 FastAPI Master Backend
 Department of Consumer Affairs (DoCA), Ministry of Consumer Affairs, Food & Public Distribution
 """
@@ -48,7 +48,7 @@ from seed_data import seed_if_empty
 
 app = FastAPI(
     title="TraceX - Legal Metrology Label Compliance Scanner",
-    description="Statutory Compliance Surveillance Platform for Ministry of Consumer Affairs (DoCA) - SIH26034",
+    description="Statutory Compliance Surveillance Platform for Ministry of Consumer Affairs (DoCA)",
     version="1.0.0"
 )
 

@@ -1,6 +1,6 @@
 """
 Database Configuration (SQLite with SQLAlchemy, migration-ready for PostgreSQL)
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 """
 
 import os

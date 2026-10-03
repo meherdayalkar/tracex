@@ -1,6 +1,6 @@
 """
 Legal Metrology (Packaged Commodities) Rules, 2011 - Rules Engine
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 
 Pure, decoupled statutory checks. Each function returns:
 {

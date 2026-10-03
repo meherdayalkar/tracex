@@ -1,6 +1,6 @@
 """
 Authentication & Authorization Module
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 
 Provides:
 - FIPS/NIST PBKDF2-HMAC-SHA256 password hashing (600k iterations, zero deprecated modules)
@@ -23,7 +23,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User
 
-JWT_SECRET = os.environ.get("JWT_SECRET", "tracex_sih26034_secure_jwt_secret_doca_gov_in_2026")
+JWT_SECRET = os.environ.get("JWT_SECRET", "tracex_secure_jwt_secret_doca_gov_in_2026")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
 PBKDF2_ITERATIONS = 600000

@@ -241,7 +241,7 @@ export default function InspectorView({ currentUser, authToken, onLogout, onOpen
         {/* Footer Authority Badge */}
         <div className="hidden md:block p-4 border-t border-slate-800 text-[10px] text-slate-500">
           <div>Department of Consumer Affairs</div>
-          <div>Govt of India • SIH26034</div>
+          <div>Govt of India</div>
         </div>
       </aside>
 

@@ -1,6 +1,6 @@
 """
 Cryptographic Signing & Verification Service
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 
 Implements RSA-2048 Digital Signing and SHA-256 Integrity Verification for
 official Legal Metrology Notices under Section 36(1).

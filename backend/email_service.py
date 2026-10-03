@@ -1,6 +1,6 @@
 """
 Email Service with Multi-Protocol Dispatch & Digital Signature Attachment
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 
 Sends official Show-Cause Notices with:
 1. Signed Notice PDF attachment

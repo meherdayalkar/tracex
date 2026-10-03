@@ -1,6 +1,6 @@
 """
 Vision-LLM & Native OCR Extraction Layer
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 
 Extracts structured Legal Metrology declaration fields and confidence scores from packaging photos.
 Supports live Vision-LLM API calls, local native Windows OCR (Windows.Media.Ocr),

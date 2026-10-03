@@ -1,6 +1,6 @@
 """
 PDF Generator Service (ReportLab)
-Project [TraceX] (SIH26034) - Department of Consumer Affairs (DoCA)
+Project [TraceX] - Department of Consumer Affairs (DoCA)
 
 Generates:
 1. Compliance Audit Reports
